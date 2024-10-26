@@ -1,8 +1,10 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, BadRequestException, InternalServerErrorException, NotFoundException, ConflictException } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, BadRequestException, InternalServerErrorException, NotFoundException, ConflictException, UseGuards } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { Prisma } from '@prisma/client';
+import { Roles } from 'src/auth/auth.decorator';
+import { AuthGuard } from 'src/auth/auth.guard';
 
 @Controller('users')
 export class UsersController {
@@ -17,6 +19,8 @@ export class UsersController {
     }
   }
 
+  @Roles('Admin')
+  @UseGuards(AuthGuard)
   @Get()
   async findAll() {
     try {
@@ -35,6 +39,9 @@ export class UsersController {
     }
   }
 
+  @Roles('Admin')
+  @UseGuards(AuthGuard)
+  @Roles('Admin')
   @Patch(':id')
   async update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
     try {
@@ -44,6 +51,8 @@ export class UsersController {
     }
   }
 
+  @Roles('Admin')
+  @UseGuards(AuthGuard)
   @Delete(':id')
   async remove(@Param('id') id: string) {
     try {

@@ -1,10 +1,26 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, BadRequestException, InternalServerErrorException, NotFoundException } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+  BadRequestException,
+  InternalServerErrorException,
+  NotFoundException,
+  UseGuards,
+} from '@nestjs/common';
 import { CredentialsService } from './credentials.service';
 import { CreateCredentialDto } from './dto/create-credential.dto';
 import { UpdateCredentialDto } from './dto/update-credential.dto';
 import { Prisma } from '@prisma/client';
+import { AuthGuard } from 'src/auth/auth.guard';
+import { RolesGuard } from 'src/auth/auth.guard'; 
+import { Roles } from 'src/auth/auth.decorator'; 
 
 @Controller('credentials')
+@UseGuards(RolesGuard) 
 export class CredentialsController {
   constructor(private readonly credentialsService: CredentialsService) {}
 
@@ -18,6 +34,8 @@ export class CredentialsController {
   }
 
   @Get()
+  @Roles('Admin') // Especifica los roles permitidos
+  @UseGuards(AuthGuard)
   async findAll() {
     try {
       return await this.credentialsService.findAll();
@@ -35,6 +53,8 @@ export class CredentialsController {
     }
   }
 
+  @Roles('Admin') // Especifica los roles permitidos
+  @UseGuards(AuthGuard)
   @Patch(':id')
   async update(@Param('id') id: string, @Body() updateCredentialDto: UpdateCredentialDto) {
     try {
@@ -44,6 +64,8 @@ export class CredentialsController {
     }
   }
 
+  @Roles('Admin') // Especifica los roles permitidos
+  @UseGuards(AuthGuard)
   @Delete(':id')
   async remove(@Param('id') id: string) {
     try {

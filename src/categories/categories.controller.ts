@@ -1,15 +1,30 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, BadRequestException, InternalServerErrorException, NotFoundException, UseGuards } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+  BadRequestException,
+  InternalServerErrorException,
+  NotFoundException,
+  UseGuards,
+} from '@nestjs/common';
 import { CategoriesService } from './categories.service';
 import { CreateCategoryDto } from './dto/create-category.dto';
 import { UpdateCategoryDto } from './dto/update-category.dto';
 import { Prisma } from '@prisma/client';
 import { AuthGuard } from 'src/auth/auth.guard';
+import { RolesGuard } from 'src/auth/auth.guard'; 
+import { Roles } from 'src/auth/auth.decorator'; 
 
 @Controller('categories')
+@UseGuards(AuthGuard, RolesGuard) // Aplicamos los guardias globalmente en el controlador
 export class CategoriesController {
   constructor(private readonly categoriesService: CategoriesService) {}
 
-  @UseGuards(AuthGuard)
+  @Roles('Coordinador', 'Admin')
   @Post()
   async create(@Body() createCategoryDto: CreateCategoryDto) {
     try {
@@ -19,7 +34,7 @@ export class CategoriesController {
     }
   }
 
-  @UseGuards(AuthGuard)
+  @Roles('Coordinador', 'Admin', 'Docente', 'Estudiante')
   @Get()
   async findAll() {
     try {
@@ -29,7 +44,7 @@ export class CategoriesController {
     }
   }
 
-  @UseGuards(AuthGuard)
+  @Roles('Coordinador', 'Admin', 'Docente', 'Estudiante')
   @Get(':id')
   async findOne(@Param('id') id: string) {
     try {
@@ -39,7 +54,7 @@ export class CategoriesController {
     }
   }
 
-  @UseGuards(AuthGuard)
+  @Roles('Coordinador', 'Admin')
   @Patch(':id')
   async update(@Param('id') id: string, @Body() updateCategoryDto: UpdateCategoryDto) {
     try {
@@ -49,7 +64,7 @@ export class CategoriesController {
     }
   }
 
-  @UseGuards(AuthGuard)
+  @Roles('Coordinador', 'Admin')
   @Delete(':id')
   async remove(@Param('id') id: string) {
     try {

@@ -1,15 +1,30 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, BadRequestException, InternalServerErrorException, NotFoundException, UseGuards } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+  BadRequestException,
+  InternalServerErrorException,
+  NotFoundException,
+  UseGuards,
+} from '@nestjs/common';
 import { UserscoursesService } from './userscourses.service';
 import { CreateUserscourseDto } from './dto/create-userscourse.dto';
 import { UpdateUserscourseDto } from './dto/update-userscourse.dto';
 import { Prisma } from '@prisma/client';
 import { AuthGuard } from 'src/auth/auth.guard';
+import { RolesGuard } from 'src/auth/auth.guard'; 
+import { Roles } from 'src/auth/auth.decorator'; 
 
 @Controller('userscourses')
+@UseGuards(AuthGuard, RolesGuard) // Aplicar guardias de autenticación y roles a todo el controlador
 export class UserscoursesController {
   constructor(private readonly userscoursesService: UserscoursesService) {}
 
-  @UseGuards(AuthGuard)
+  @Roles('Coordinador', 'Admin', 'Docente') // Roles permitidos para crear
   @Post()
   async create(@Body() createUserscourseDto: CreateUserscourseDto) {
     try {
@@ -19,7 +34,7 @@ export class UserscoursesController {
     }
   }
 
-  @UseGuards(AuthGuard)
+  @Roles('Coordinador', 'Admin', 'Docente', 'Estudiante') // Roles permitidos para obtener todos
   @Get()
   async findAll() {
     try {
@@ -29,7 +44,7 @@ export class UserscoursesController {
     }
   }
 
-  @UseGuards(AuthGuard)
+  @Roles('Coordinador', 'Admin', 'Docente', 'Estudiante') // Roles permitidos para obtener uno específico
   @Get(':id')
   async findOne(@Param('id') id: string) {
     try {
@@ -39,7 +54,7 @@ export class UserscoursesController {
     }
   }
 
-  @UseGuards(AuthGuard)
+  @Roles('Coordinador', 'Admin', 'Docente') // Roles permitidos para actualizar
   @Patch(':id')
   async update(@Param('id') id: string, @Body() updateUserscourseDto: UpdateUserscourseDto) {
     try {
@@ -49,7 +64,7 @@ export class UserscoursesController {
     }
   }
 
-  @UseGuards(AuthGuard)
+  @Roles('Coordinador', 'Admin', 'Docente') // Roles permitidos para eliminar
   @Delete(':id')
   async remove(@Param('id') id: string) {
     try {

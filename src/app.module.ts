@@ -1,6 +1,4 @@
 import { Module } from '@nestjs/common';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
 import { RolesModule } from './roles/roles.module';
 import { CategoriesModule } from './categories/categories.module';
 import { ModalitiesModule } from './modalities/modalities.module';
@@ -14,7 +12,7 @@ import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [RolesModule, CategoriesModule, ModalitiesModule, InscriptionModule, UsersModule, CoursesModule, UserscoursesModule, CredentialsModule, AuthModule],
-  controllers: [AppController],
-  providers: [AppService],
+  controllers: [],
+  providers: [],
 })
 export class AppModule {}

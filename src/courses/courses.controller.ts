@@ -1,15 +1,30 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, BadRequestException, InternalServerErrorException, NotFoundException, UseGuards } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+  BadRequestException,
+  InternalServerErrorException,
+  NotFoundException,
+  UseGuards,
+} from '@nestjs/common';
 import { CoursesService } from './courses.service';
 import { CreateCourseDto } from './dto/create-course.dto';
 import { UpdateCourseDto } from './dto/update-course.dto';
 import { Prisma } from '@prisma/client';
 import { AuthGuard } from 'src/auth/auth.guard';
+import { RolesGuard } from 'src/auth/auth.guard'; 
+import { Roles } from 'src/auth/auth.decorator'; 
 
 @Controller('courses')
+@UseGuards(AuthGuard, RolesGuard) // Aplicamos los guardias globalmente en el controlador
 export class CoursesController {
   constructor(private readonly coursesService: CoursesService) {}
 
-  @UseGuards(AuthGuard)
+  @Roles('Coordinador', 'Admin')
   @Post()
   async create(@Body() createCourseDto: CreateCourseDto) {
     try {
@@ -19,7 +34,7 @@ export class CoursesController {
     }
   }
 
-  @UseGuards(AuthGuard)
+  @Roles('Coordinador', 'Admin', 'Docente', 'Estudiante')
   @Get()
   async findAll() {
     try {
@@ -29,7 +44,7 @@ export class CoursesController {
     }
   }
 
-  @UseGuards(AuthGuard)
+  @Roles('Coordinador', 'Admin', 'Docente', 'Estudiante')
   @Get(':id')
   async findOne(@Param('id') id: string) {
     try {
@@ -39,7 +54,7 @@ export class CoursesController {
     }
   }
 
-  @UseGuards(AuthGuard)
+  @Roles('Coordinador', 'Admin')
   @Patch(':id')
   async update(@Param('id') id: string, @Body() updateCourseDto: UpdateCourseDto) {
     try {
@@ -49,7 +64,7 @@ export class CoursesController {
     }
   }
 
-  @UseGuards(AuthGuard)
+  @Roles('Coordinador', 'Admin')
   @Delete(':id')
   async remove(@Param('id') id: string) {
     try {
