@@ -1,13 +1,32 @@
 version: 0.2
 
+env:
+  variables:
+    REGION: "us-east-2"
+    REPOSITORY_URI: "148761658084.dkr.ecr.us-east-2.amazonaws.com/backend"
+
 phases:
+  install:
+    runtime-versions:
+      docker: 20
+    commands:
+      - echo "Installing dependencies..."
+      # Agrega otros comandos de instalación aquí si los necesitas
+
   pre_build:
     commands:
-      -aws ecr get-login-password --region us-east-2 | docker login --username AWS --password-stdin 148761658084.dkr.ecr.us-east-2.amazonaws.com
+      - echo "Logging in to Amazon ECR..."
+      - aws ecr get-login-password --region $REGION | docker login --username AWS --password-stdin $REPOSITORY_URI
+
   build:
     commands:
-      -docker build -t backend .
-      -docker tag backend:latest 148761658084.dkr.ecr.us-east-2.amazonaws.com/backend:latest
+      - echo "Build started on `date`"
+      - echo "Building the Docker image..."
+      - docker build -t backend .
+      - docker tag backend:latest $REPOSITORY_URI:latest
+
   post_build:
     commands:
-      -docker push 148761658084.dkr.ecr.us-east-2.amazonaws.com/backend:latest
+      - echo "Build completed on `date`"
+      - echo "Pushing the Docker image..."
+      - docker push $REPOSITORY_URI:latest
