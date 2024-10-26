@@ -1,5 +1,6 @@
 version: 0.2
-
+env:
+  image: aws/codebuild/standard:4.0
 phases:
   pre_build:
     commands:
