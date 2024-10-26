@@ -1,71 +1,59 @@
-Backend Project
-Este proyecto es una API backend construida con Nest.js y Prisma ORM, conectada a una base de datos MySQL. La guía a continuación te ayudará a instalar, configurar y ejecutar el backend y la base de datos.
+# Proyecto Backend con Nest.js y Prisma
 
-Prerrequisitos
-Node.js (versión 14 o superior)
-Docker
-Nest.js CLI (Opcional, pero recomendado)
-Prisma CLI para la gestión de la base de datos
-Instalación
-Clonar el repositorio:
+Este proyecto es una API backend construida con Nest.js y Prisma ORM para gestionar una base de datos MySQL.
 
-bash
-Copiar código
-git clone https://github.com/tu_usuario/tu_repositorio.git
-cd tu_repositorio
-Instalar las dependencias del proyecto:
+## Prerrequisitos
 
-bash
-Copiar código
+Antes de empezar, asegúrate de tener instaladas las siguientes herramientas:
+
+- [Node.js](https://nodejs.org/) (versión 14 o superior)
+- [Docker](https://www.docker.com/get-started) para ejecutar MySQL en contenedores
+- [Nest.js CLI](https://docs.nestjs.com/cli/overview) (opcional pero recomendado)
+- [Prisma CLI](https://www.prisma.io/docs/concepts/components/prisma-cli) para gestionar la base de datos
+
+## Instalación y Configuración
+
+### 1. Clonar el repositorio
+
+```bash
+git [clone https://github.com/tu_usuario/tu_repositorio.git](https://github.com/Nerfer1205/backend-prueba.git)
+cd backend-prueba
+```
+
+### 2. Instalar dependencias
+
+```bash
 npm install
-Configurar las variables de entorno:
+```
 
-Crea un archivo .env en el directorio raíz y agrega los siguientes valores:
-
-plaintext
-Copiar código
+### 3. Configurar las variables de entorno
+Crea un archivo .env en la raíz del proyecto y agrega la URL de conexión a la base de datos:
+```plaintext
 DATABASE_URL="mysql://usuario:contraseña@localhost:3306/nombre_bd"
-Reemplaza usuario, contraseña, localhost, 3306, y nombre_bd con tus valores de conexión a MySQL.
+```
+Reemplaza usuario, contraseña, localhost, 3306, y nombre_bd con la información de conexión de tu base de datos MySQL.
 
-Configuración de la Base de Datos con Docker
-Si prefieres ejecutar MySQL usando Docker, sigue estos pasos:
+##Configuración de la Base de Datos con Docker
+Para configurar una base de datos MySQL en Docker:
 
-Crear un contenedor de MySQL:
-
-bash
-Copiar código
+## 1.Crear un contenedor de MySQL
+```bash
 docker run --name mysql-container -e MYSQL_ROOT_PASSWORD=contraseña -e MYSQL_DATABASE=nombre_bd -p 3306:3306 -d mysql:8.0
-Esto ejecutará MySQL en el puerto 3306 con nombre_bd como nombre de la base de datos. Asegúrate de actualizar la variable DATABASE_URL en tu archivo .env con estos detalles.
-
-Ejecutar migraciones de Prisma:
-
-Inicializa la base de datos y sincroniza el esquema ejecutando:
-
-bash
-Copiar código
+```
+##2. Ejecutar migraciones de Prisma
+Con la base de datos configurada, sincroniza el esquema de Prisma ejecutando:
+```bash
 npx prisma migrate dev --name init
-Esto creará las tablas en tu base de datos de acuerdo con el esquema de Prisma.
+```
 
-Generar el cliente Prisma:
-
-Si aún no has generado el cliente Prisma, ejecútalo con:
-
-bash
-Copiar código
+## 3. Generar el cliente Prisma
+Para generar el cliente Prisma (necesario para interactuar con la base de datos), usa el comando:
+```bash
 npx prisma generate
-Ejecución del Backend
-Iniciar el servidor de desarrollo de Nest.js:
-
-bash
-Copiar código
+```
+## Ejecución del Backend
+"" 1. Iniciar el servidor de desarrollo
+Para iniciar el servidor en modo desarrollo:
+```bash
 npm run start:dev
-El servidor estará disponible en http://localhost:3000.
-
-Verificar la conexión a la base de datos:
-
-Puedes verificar la conexión y los datos utilizando un cliente de base de datos como DBeaver o la consola Prisma:
-
-bash
-Copiar código
-npx prisma studio
-Prisma Studio se abrirá en tu navegador y te permitirá ver y gestionar los datos de la base de datos.
+```
